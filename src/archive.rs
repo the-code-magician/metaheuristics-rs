@@ -1,19 +1,22 @@
 pub trait Archive {
-    type Solution;
-    type Fitness;
+    type Solution: crate::Individual;
+    type Fitness: PartialOrd;
 
-    fn add(&mut self, solution: Self::Solution, fitness: Self::Fitness);
+    fn add(&mut self, solution: Self::Solution);
     fn get_best(&self) -> Option<&Self::Solution>;
 }
 
-pub struct BasicArchive<S, F> {
+pub struct BasicArchive<I>
+where
+    I: crate::Individual,
+{
     capacity: usize,
-    entries: Vec<(S, F)>,
+    entries: Vec<I>,
 }
 
-impl<S, F> BasicArchive<S, F>
+impl<I> BasicArchive<I>
 where
-    F: PartialOrd,
+    I: crate::Individual,
 {
     pub fn new(capacity: usize) -> Self {
         Self {
@@ -23,22 +26,22 @@ where
     }
 }
 
-impl<S, F> Archive for BasicArchive<S, F>
+impl<I> Archive for BasicArchive<I>
 where
-    F: PartialOrd,
+    I: crate::Individual,
 {
-    type Solution = S;
-    type Fitness = F;
+    type Solution = I;
+    type Fitness = I::Fitness;
 
-    fn add(&mut self, solution: S, fitness: F) {
-        self.entries.push((solution, fitness));
-        self.entries.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+    fn add(&mut self, solution: I) {
+        self.entries.push(solution);
+        self.entries.sort_by(|a, b| a.fitness().partial_cmp(&b.fitness()).unwrap());
         if self.entries.len() > self.capacity {
             self.entries.pop();
         }
     }
 
     fn get_best(&self) -> Option<&Self::Solution> {
-        self.entries.first().map(|(solution, _)| solution)
+        self.entries.first()
     }
 }
