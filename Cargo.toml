@@ -1,0 +1,10 @@
+[package]
+name = "metaheuristics"
+version = "0.2.0"
+authors = ["João Cardos <the-code-magician>"]
+edition = "2021"
+description = "A Rust library for meta-heuristic optimization algorithms"
+license = "MIT"
+
+[dependencies]
+rand = "0.8"
