@@ -1,9 +1,7 @@
-// src/particle_swarm.rs
-
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
-use crate::individual::{Individual, FitnessValue};
+use crate::individual::Individual;
 use std::f64;
 
 #[derive(Clone)]
@@ -51,7 +49,7 @@ impl Individual for ParticleIndividual {
 
 impl Default for ParticleIndividual {
     fn default() -> Self {
-        Self::new(2)
+        Self::new(2) // Default to 2 dimensions
     }
 }
 

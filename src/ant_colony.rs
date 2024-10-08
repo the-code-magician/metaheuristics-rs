@@ -23,12 +23,6 @@ impl Individual for TourIndividual {
     }
 }
 
-impl FitnessValue for f64 {
-    fn to_f64(&self) -> f64 {
-        *self
-    }
-}
-
 pub struct AntColony {
     pub num_ants: usize,
     pub num_iterations: usize,

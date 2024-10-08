@@ -1,3 +1,5 @@
+// src/genetic_algorithm.rs
+
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
@@ -24,41 +26,21 @@ impl GeneticAlgorithm {
             generations,
         }
     }
-}
 
-impl<I> Optimizer<I> for GeneticAlgorithm
-where
-    I: Individual + Crossover + Mutate + Default,
-    I::Fitness: PartialOrd + FitnessValue,
-{
-    fn optimize<A>(&self, archive: &mut A)
+    fn initialize_population<I>(&self) -> Vec<I>
     where
-        A: Archive<Solution = I, Fitness = I::Fitness>,
+        I: Individual + Default,
     {
-        let mut population: Vec<I> = self.initialize_population();
-        let mut rng = thread_rng();
-
-        for _ in 0..self.generations {
-            let fitness_scores: Vec<I::Fitness> = population.iter().map(|ind| ind.fitness()).collect();
-
-            // Add to archive
-            for individual in &population {
-                archive.add(individual.clone());
-            }
-
-            let mating_pool = self.selection(&population, &fitness_scores);
-
-            population = self.crossover_and_mutate(mating_pool, &mut rng);
-        }
-    }
-
-    fn initialize_population(&self) -> Vec<I> {
         (0..self.population_size)
             .map(|_| I::default())
             .collect()
     }
 
-    fn selection(&self, population: &Vec<I>, fitness_scores: &Vec<I::Fitness>) -> Vec<I> {
+    fn selection<I>(&self, population: &Vec<I>, fitness_scores: &Vec<I::Fitness>) -> Vec<I>
+    where
+        I: Individual,
+        I::Fitness: FitnessValue,
+    {
         let total_fitness: f64 = fitness_scores
             .iter()
             .map(|f| f.to_f64())
@@ -67,7 +49,7 @@ where
         let mut selected = Vec::with_capacity(self.population_size);
         let mut rng = thread_rng();
         for _ in 0..self.population_size {
-            let mut pick = rng.gen::<f64>() * total_fitness;
+            let pick = rng.gen::<f64>() * total_fitness;
             let mut current = 0.0;
 
             for (individual, fitness) in population.iter().zip(fitness_scores.iter()) {
@@ -81,11 +63,14 @@ where
         selected
     }
 
-    fn crossover_and_mutate(
+    fn crossover_and_mutate<I>(
         &self,
         mating_pool: Vec<I>,
         rng: &mut ThreadRng,
-    ) -> Vec<I> {
+    ) -> Vec<I>
+    where
+        I: Individual + Crossover + Mutate,
+    {
         let mut new_population = Vec::with_capacity(self.population_size);
 
         for _ in 0..(self.population_size / 2) {
@@ -119,5 +104,32 @@ where
         }
 
         new_population
+    }
+}
+
+impl<I> Optimizer<I> for GeneticAlgorithm
+where
+    I: Individual + Crossover + Mutate + Default,
+    I::Fitness: PartialOrd + FitnessValue,
+{
+    fn optimize<A>(&self, archive: &mut A)
+    where
+        A: Archive<Solution = I, Fitness = I::Fitness>,
+    {
+        let mut population: Vec<I> = self.initialize_population();
+        let mut rng = thread_rng();
+
+        for _ in 0..self.generations {
+            let fitness_scores: Vec<I::Fitness> = population.iter().map(|ind| ind.fitness()).collect();
+
+            // Add to archive
+            for individual in &population {
+                archive.add(individual.clone());
+            }
+
+            let mating_pool = self.selection(&population, &fitness_scores);
+
+            population = self.crossover_and_mutate(mating_pool, &mut rng);
+        }
     }
 }
