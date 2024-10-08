@@ -34,7 +34,7 @@ impl AntColony {
 }
 
 impl Optimizer<TourIndividual> for AntColony {
-    fn optimize<A>(&self, archive: &mut A, observers: &mut [O])
+    fn optimize<A, O>(&self, archive: &mut A, observers: &mut [O])
     where
         A: Archive<Solution = TourIndividual, Fitness = f64>,
         O: Observer<TourIndividual>,
@@ -47,16 +47,13 @@ impl Optimizer<TourIndividual> for AntColony {
             observer.on_iteration(0, &[]);
         }
 
-        for _ in 0..self.num_iterations {
+        for iteration in 0..self.num_iterations {
             let mut all_tours = Vec::new();
-            let mut all_lengths = Vec::new();
 
             for _ in 0..self.num_ants {
-                let (tour, length) = self.construct_solution(&pheromones);
-                all_tours.push(tour.clone());
-                all_lengths.push(length);
+                let individual = self.construct_solution(&pheromones);
+                all_tours.push(individual.clone());
 
-                let individual = TourIndividual::new(tour.clone(), length);
                 archive.add(individual);
             }
 
@@ -73,14 +70,14 @@ impl Optimizer<TourIndividual> for AntColony {
             }
 
             // Update pheromones based on ant tours
-            for (tour, length) in all_tours.iter().zip(all_lengths.iter()) {
-                for k in 0..tour.len() - 1 {
-                    let i = tour[k];
-                    let j = tour[k + 1];
-                    pheromones[i][j] += 1.0 / length;
-                    pheromones[j][i] += 1.0 / length;
+            all_tours.iter().for_each(|tour| {
+                for k in 0..tour.tour.len() - 1 {
+                    let i = tour.tour[k];
+                    let j = tour.tour[k + 1];
+                    pheromones[i][j] += 1.0 / tour.length;
+                    pheromones[j][i] += 1.0 / tour.length;
                 }
-            }
+            });
         }
         
         for observer in observers.iter_mut() {
@@ -90,7 +87,7 @@ impl Optimizer<TourIndividual> for AntColony {
 }
 
 impl AntColony {
-    fn construct_solution(&self, pheromones: &Vec<Vec<f64>>) -> (Vec<usize>, f64) {
+    fn construct_solution(&self, pheromones: &Vec<Vec<f64>>) -> TourIndividual {
         let num_nodes = self.distance_matrix.len();
         let mut rng = thread_rng();
         let mut tour = Vec::with_capacity(num_nodes + 1);
@@ -119,7 +116,7 @@ impl AntColony {
         tour.push(start_node);
         total_length += self.distance_matrix[current_node][start_node];
 
-        (tour, total_length)
+        TourIndividual::new(tour, total_length)
     }
 
     fn calculate_probabilities(

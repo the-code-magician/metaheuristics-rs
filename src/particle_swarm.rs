@@ -3,6 +3,7 @@ use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individuals::ParticleIndividual;
 use crate::observer::Observer;
+use crate::Individual;
 use std::f64;
 
 pub struct ParticleSwarm<F>
@@ -78,7 +79,7 @@ where
             archive.add(particle.clone());
         }
 
-        for _ in 0..self.iterations {
+        for iteration in 0..self.iterations {
             for particle in &mut particles {
                 for d in 0..self.dimensions {
                     let rp = rng.gen::<f64>();
@@ -104,10 +105,10 @@ where
 
                 archive.add(particle.clone());
             }
-        }
-
-        for observer in observers.iter_mut() {
-            observer.on_iteration(iteration, &particles);
+            
+            for observer in observers.iter_mut() {
+                observer.on_iteration(iteration, &particles);
+            }
         }
 
         for observer in observers.iter_mut() {

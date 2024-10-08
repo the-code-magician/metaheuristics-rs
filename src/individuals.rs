@@ -80,16 +80,38 @@ impl Default for BitStringIndividual {
 
 #[derive(Clone)]
 pub struct ParticleIndividual {
-    position: Vec<f64>,
-    velocity: Vec<f64>,
+    pub position: Vec<f64>,
+    pub velocity: Vec<f64>,
+    pub personal_best_position: Vec<f64>,
+    pub personal_best_score: f64,
 }
 
 impl ParticleIndividual {
-    fn new(dimensions: usize) -> Self {
+    pub fn new(dimensions: usize) -> Self {
         let mut rng = thread_rng();
-        let position = (0..dimensions).map(|_| rng.gen_range(-5.0..5.0)).collect();
-        let velocity = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
-        Self { position, velocity }
+        let position: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-10.0..10.0)).collect();
+        let velocity: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
+        let personal_best_position = position.clone();
+        let personal_best_score = f64::INFINITY;
+        Self {
+            position,
+            velocity,
+            personal_best_position,
+            personal_best_score,
+        }
+    }
+
+    /// Updates the fitness of the particle using the provided fitness function.
+    /// If the new fitness is better than the personal best, it updates the personal best.
+    pub fn update_fitness<F>(&mut self, fitness_function: &F)
+    where
+        F: Fn(&Vec<f64>) -> f64,
+    {
+        let fitness = fitness_function(&self.position);
+        if fitness < self.personal_best_score {
+            self.personal_best_score = fitness;
+            self.personal_best_position = self.position.clone();
+        }
     }
 }
 
@@ -97,22 +119,25 @@ impl Individual for ParticleIndividual {
     type Fitness = f64;
 
     fn fitness(&self) -> Self::Fitness {
-        self.position.iter().map(|&x| x * x).sum()
+        self.personal_best_score
+    }
+}
+
+impl Default for ParticleIndividual {
+    fn default() -> Self {
+        Self::new(2) // Default to 2 dimensions
     }
 }
 
 #[derive(Clone)]
 pub struct TourIndividual {
-    tour: Vec<usize>,
-    distances: Vec<Vec<f64>>,
+    pub tour: Vec<usize>,
+    pub length: f64,
 }
 
 impl TourIndividual {
-    fn new(num_nodes: usize, distances: Vec<Vec<f64>>) -> Self {
-        let mut tour = (0..num_nodes).collect::<Vec<_>>();
-        let mut rng = thread_rng();
-        tour.shuffle(&mut rng);
-        Self { tour, distances }
+    pub fn new(tour: Vec<usize>, length: f64) -> Self {
+        Self { tour, length }
     }
 }
 
@@ -120,14 +145,6 @@ impl Individual for TourIndividual {
     type Fitness = f64;
 
     fn fitness(&self) -> Self::Fitness {
-        let mut total_distance = 0.0;
-        for i in 0..self.tour.len() - 1 {
-            let from = self.tour[i];
-            let to = self.tour[i + 1];
-            total_distance += self.distances[from][to];
-        }
-        // Return to start
-        total_distance += self.distances[self.tour[self.tour.len() - 1]][self.tour[0]];
-        total_distance
+        self.length
     }
 }
