@@ -1,5 +1,3 @@
-// src/individuals.rs
-
 use rand::prelude::*;
 use crate::individual::{Individual, Crossover, Mutate};
 use std::f64;

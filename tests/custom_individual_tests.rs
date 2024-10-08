@@ -63,7 +63,7 @@ impl Default for CustomIndividual {
 #[test]
 fn test_genetic_algorithm_custom_individual() {
     let ga = GeneticAlgorithm::new(100, 0.1, 0.7, 50);
-    let mut archive = BasicArchive::new(5);
+    let mut archive:  = BasicArchive::new(5);
 
     let mut observers = [];
 

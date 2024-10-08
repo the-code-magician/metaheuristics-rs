@@ -1,5 +1,5 @@
 use metaheuristics::ant_colony::AntColony;
-use metaheuristics::optimizer::Optimizer;
+use metaheuristics::Optimizer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::individuals::TourIndividual;
 
@@ -19,7 +19,7 @@ fn test_ant_colony_optimization() {
     ga.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());
-    
+
     if let Some(best_tour) = archive.get_best() {
         let fitness = best_tour.fitness();
         assert!(fitness >= 0.0);

@@ -1,4 +1,5 @@
 use metaheuristics::particle_swarm::ParticleSwarm;
+use metaheuristics::optimizer::Optimizer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::individuals::ParticleIndividual;
 
