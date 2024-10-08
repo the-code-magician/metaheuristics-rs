@@ -2,7 +2,7 @@ use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::Individual;
-use crate::Individuals::ParticleIndividual;
+use crate::individuals::ParticleIndividual;
 use std::f64;
 
 pub struct ParticleSwarm<F>

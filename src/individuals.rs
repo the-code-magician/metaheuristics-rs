@@ -1,7 +1,7 @@
 // src/individuals.rs
 
 use rand::prelude::*;
-use crate::individual::{Individual, FitnessValue, Crossover, Mutate, Neighbor};
+use crate::individual::{Individual, Crossover, Mutate};
 use std::f64;
 
 #[derive(Clone)]
