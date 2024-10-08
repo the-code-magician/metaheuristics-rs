@@ -9,8 +9,6 @@ pub struct NumericIndividual {
     pub genes: Vec<f64>,
 }
 
-// Implementations for NumericIndividual...
-
 impl Individual for NumericIndividual {
     type Fitness = f64;
 
@@ -48,8 +46,6 @@ pub struct BitStringIndividual {
     pub bits: Vec<bool>,
 }
 
-// Implementations for BitStringIndividual...
-
 impl Individual for BitStringIndividual {
     type Fitness = usize;
 
@@ -79,5 +75,59 @@ impl Default for BitStringIndividual {
         let mut rng = thread_rng();
         let bits = (0..20).map(|_| rng.gen::<bool>()).collect();
         Self { bits }
+    }
+}
+
+#[derive(Clone)]
+struct ParticleIndividual {
+    position: Vec<f64>,
+    velocity: Vec<f64>,
+}
+
+impl ParticleIndividual {
+    fn new(dimensions: usize) -> Self {
+        let mut rng = thread_rng();
+        let position = (0..dimensions).map(|_| rng.gen_range(-5.0..5.0)).collect();
+        let velocity = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
+        Self { position, velocity }
+    }
+}
+
+impl Individual for ParticleIndividual {
+    type Fitness = f64;
+
+    fn fitness(&self) -> Self::Fitness {
+        self.position.iter().map(|&x| x * x).sum()
+    }
+}
+
+#[derive(Clone)]
+struct TourIndividual {
+    tour: Vec<usize>,
+    distances: Vec<Vec<f64>>,
+}
+
+impl TourIndividual {
+    fn new(num_nodes: usize, distances: Vec<Vec<f64>>) -> Self {
+        let mut tour = (0..num_nodes).collect::<Vec<_>>();
+        let mut rng = thread_rng();
+        tour.shuffle(&mut rng);
+        Self { tour, distances }
+    }
+}
+
+impl Individual for TourIndividual {
+    type Fitness = f64;
+
+    fn fitness(&self) -> Self::Fitness {
+        let mut total_distance = 0.0;
+        for i in 0..self.tour.len() - 1 {
+            let from = self.tour[i];
+            let to = self.tour[i + 1];
+            total_distance += self.distances[from][to];
+        }
+        // Return to start
+        total_distance += self.distances[self.tour[self.tour.len() - 1]][self.tour[0]];
+        total_distance
     }
 }
