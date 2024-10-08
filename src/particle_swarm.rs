@@ -4,55 +4,6 @@ use crate::archive::Archive;
 use crate::individual::Individual;
 use std::f64;
 
-#[derive(Clone)]
-pub struct ParticleIndividual {
-    pub position: Vec<f64>,
-    pub velocity: Vec<f64>,
-    pub personal_best_position: Vec<f64>,
-    pub personal_best_score: f64,
-}
-
-impl ParticleIndividual {
-    pub fn new(dimensions: usize) -> Self {
-        let mut rng = thread_rng();
-        let position: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-10.0..10.0)).collect();
-        let velocity: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
-        let personal_best_position = position.clone();
-        let personal_best_score = f64::INFINITY;
-        Self {
-            position,
-            velocity,
-            personal_best_position,
-            personal_best_score,
-        }
-    }
-
-    pub fn update_fitness<F>(&mut self, fitness_function: &F)
-    where
-        F: Fn(&Vec<f64>) -> f64,
-    {
-        let fitness = fitness_function(&self.position);
-        if fitness < self.personal_best_score {
-            self.personal_best_score = fitness;
-            self.personal_best_position = self.position.clone();
-        }
-    }
-}
-
-impl Individual for ParticleIndividual {
-    type Fitness = f64;
-
-    fn fitness(&self) -> Self::Fitness {
-        self.personal_best_score
-    }
-}
-
-impl Default for ParticleIndividual {
-    fn default() -> Self {
-        Self::new(2) // Default to 2 dimensions
-    }
-}
-
 pub struct ParticleSwarm<F>
 where
     F: Fn(&Vec<f64>) -> f64 + Copy,

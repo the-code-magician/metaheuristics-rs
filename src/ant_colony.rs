@@ -3,26 +3,6 @@ use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::{Individual, FitnessValue};
 
-#[derive(Clone)]
-pub struct TourIndividual {
-    pub tour: Vec<usize>,
-    pub length: f64,
-}
-
-impl TourIndividual {
-    pub fn new(tour: Vec<usize>, length: f64) -> Self {
-        Self { tour, length }
-    }
-}
-
-impl Individual for TourIndividual {
-    type Fitness = f64;
-
-    fn fitness(&self) -> Self::Fitness {
-        self.length
-    }
-}
-
 pub struct AntColony {
     pub num_ants: usize,
     pub num_iterations: usize,
