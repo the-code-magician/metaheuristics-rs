@@ -35,7 +35,6 @@ where
     where
         A: Archive<Solution = I, Fitness = I::Fitness>,
     {
-        use crate::individual::FitnessValue; // Import the trait for to_f64()
         let mut population: Vec<I> = self.initialize_population();
         let mut rng = thread_rng();
 
@@ -52,13 +51,7 @@ where
             population = self.crossover_and_mutate(mating_pool, &mut rng);
         }
     }
-}
 
-impl<I> GeneticAlgorithm
-where
-    I: Individual + Crossover + Mutate + Default,
-    I::Fitness: PartialOrd + FitnessValue,
-{
     fn initialize_population(&self) -> Vec<I> {
         (0..self.population_size)
             .map(|_| I::default())
@@ -66,7 +59,6 @@ where
     }
 
     fn selection(&self, population: &Vec<I>, fitness_scores: &Vec<I::Fitness>) -> Vec<I> {
-        use crate::individual::FitnessValue; // Import the trait for to_f64()
         let total_fitness: f64 = fitness_scores
             .iter()
             .map(|f| f.to_f64())

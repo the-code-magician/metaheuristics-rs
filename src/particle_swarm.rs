@@ -1,3 +1,5 @@
+// src/particle_swarm.rs
+
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
@@ -15,8 +17,8 @@ pub struct ParticleIndividual {
 impl ParticleIndividual {
     pub fn new(dimensions: usize) -> Self {
         let mut rng = thread_rng();
-        let position = (0..dimensions).map(|_| rng.gen_range(-10.0..10.0)).collect();
-        let velocity = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
+        let position: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-10.0..10.0)).collect();
+        let velocity: Vec<f64> = (0..dimensions).map(|_| rng.gen_range(-1.0..1.0)).collect();
         let personal_best_position = position.clone();
         let personal_best_score = f64::INFINITY;
         Self {
@@ -27,7 +29,7 @@ impl ParticleIndividual {
         }
     }
 
-    pub fn update_fitness<F>(&mut self, fitness_function: F)
+    pub fn update_fitness<F>(&mut self, fitness_function: &F)
     where
         F: Fn(&Vec<f64>) -> f64,
     {
@@ -47,21 +49,15 @@ impl Individual for ParticleIndividual {
     }
 }
 
-impl FitnessValue for f64 {
-    fn to_f64(&self) -> f64 {
-        *self
-    }
-}
-
 impl Default for ParticleIndividual {
     fn default() -> Self {
-        Self::new(2) // Default to 2 dimensions
+        Self::new(2)
     }
 }
 
 pub struct ParticleSwarm<F>
 where
-    F: Fn(&Vec<f64>) -> f64,
+    F: Fn(&Vec<f64>) -> f64 + Copy,
 {
     pub swarm_size: usize,
     pub dimensions: usize,
@@ -74,7 +70,7 @@ where
 
 impl<F> ParticleSwarm<F>
 where
-    F: Fn(&Vec<f64>) -> f64,
+    F: Fn(&Vec<f64>) -> f64 + Copy,
 {
     pub fn new(
         swarm_size: usize,
@@ -97,7 +93,9 @@ where
     }
 }
 
-impl Optimizer<ParticleIndividual> for ParticleSwarm<impl Fn(&Vec<f64>) -> f64 + Copy>
+impl<F> Optimizer<ParticleIndividual> for ParticleSwarm<F>
+where
+    F: Fn(&Vec<f64>) -> f64 + Copy,
 {
     fn optimize<A>(&self, archive: &mut A)
     where
