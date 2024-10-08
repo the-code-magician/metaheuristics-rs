@@ -41,7 +41,7 @@ fn test_individual_trait_with_genetic_algorithm() {
     let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
     let mut observers: Vec<Observer> = [];
 
-    ga.optimize(&mut archive);
+    ga.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());
 }
