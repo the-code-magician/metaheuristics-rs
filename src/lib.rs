@@ -5,7 +5,7 @@ pub mod archive;
 pub use archive::{Archive, BasicArchive};
 
 pub mod individual;
-pub use individual::Individual;
+pub use individual::{Individual, FitnessValue};
 
 pub mod genetic_algorithm;
 pub mod simulated_annealing;

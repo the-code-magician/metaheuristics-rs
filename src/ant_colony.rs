@@ -1,6 +1,33 @@
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
+use crate::individual::{Individual, FitnessValue};
+
+#[derive(Clone)]
+pub struct TourIndividual {
+    pub tour: Vec<usize>,
+    pub length: f64,
+}
+
+impl TourIndividual {
+    pub fn new(tour: Vec<usize>, length: f64) -> Self {
+        Self { tour, length }
+    }
+}
+
+impl Individual for TourIndividual {
+    type Fitness = f64;
+
+    fn fitness(&self) -> Self::Fitness {
+        self.length
+    }
+}
+
+impl FitnessValue for f64 {
+    fn to_f64(&self) -> f64 {
+        *self
+    }
+}
 
 pub struct AntColony {
     pub num_ants: usize,
@@ -31,14 +58,10 @@ impl AntColony {
     }
 }
 
-impl Optimizer for AntColony {
-    type Solution = Vec<usize>;
-    type Fitness = f64;
-
-    fn optimize<F, A>(&self, fitness_function: F, archive: &mut A)
+impl Optimizer<TourIndividual> for AntColony {
+    fn optimize<A>(&self, archive: &mut A)
     where
-        F: Fn(&Self::Solution) -> Self::Fitness,
-        A: Archive<Solution=Self::Solution, Fitness=Self::Fitness>,
+        A: Archive<Solution = TourIndividual, Fitness = f64>,
     {
         let num_nodes = self.distance_matrix.len();
         let mut pheromones = vec![vec![1.0; num_nodes]; num_nodes];
@@ -52,8 +75,8 @@ impl Optimizer for AntColony {
                 all_tours.push(tour.clone());
                 all_lengths.push(length);
 
-                let fitness = fitness_function(&tour);
-                archive.add(tour, fitness);
+                let individual = TourIndividual::new(tour.clone(), length);
+                archive.add(individual);
             }
 
             // Evaporate pheromones

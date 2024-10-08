@@ -1,7 +1,7 @@
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
-use crate::individual::{Individual, Crossover, Mutate};
+use crate::individual::{Individual, Crossover, Mutate, FitnessValue};
 
 pub struct GeneticAlgorithm {
     pub population_size: usize,
@@ -28,23 +28,24 @@ impl GeneticAlgorithm {
 
 impl<I> Optimizer<I> for GeneticAlgorithm
 where
-    I: Individual + Crossover + Mutate,
-    I::Fitness: PartialOrd,
+    I: Individual + Crossover + Mutate + Default,
+    I::Fitness: PartialOrd + FitnessValue,
 {
     fn optimize<A>(&self, archive: &mut A)
     where
         A: Archive<Solution = I, Fitness = I::Fitness>,
     {
-        let mut population = self.initialize_population();
+        use crate::individual::FitnessValue; // Import the trait for to_f64()
+        let mut population: Vec<I> = self.initialize_population();
         let mut rng = thread_rng();
 
         for _ in 0..self.generations {
+            let fitness_scores: Vec<I::Fitness> = population.iter().map(|ind| ind.fitness()).collect();
+
             // Add to archive
             for individual in &population {
                 archive.add(individual.clone());
             }
-
-            let fitness_scores: Vec<I::Fitness> = population.iter().map(|ind| ind.fitness()).collect();
 
             let mating_pool = self.selection(&population, &fitness_scores);
 
@@ -53,20 +54,19 @@ where
     }
 }
 
-impl GeneticAlgorithm {
-    fn initialize_population<I>(&self) -> Vec<I>
-    where
-        I: Individual + Default,
-    {
+impl<I> GeneticAlgorithm
+where
+    I: Individual + Crossover + Mutate + Default,
+    I::Fitness: PartialOrd + FitnessValue,
+{
+    fn initialize_population(&self) -> Vec<I> {
         (0..self.population_size)
             .map(|_| I::default())
             .collect()
     }
 
-    fn selection<I>(&self, population: &Vec<I>, fitness_scores: &Vec<I::Fitness>) -> Vec<I>
-    where
-        I: Individual + Clone,
-    {
+    fn selection(&self, population: &Vec<I>, fitness_scores: &Vec<I::Fitness>) -> Vec<I> {
+        use crate::individual::FitnessValue; // Import the trait for to_f64()
         let total_fitness: f64 = fitness_scores
             .iter()
             .map(|f| f.to_f64())
@@ -89,14 +89,11 @@ impl GeneticAlgorithm {
         selected
     }
 
-    fn crossover_and_mutate<I>(
+    fn crossover_and_mutate(
         &self,
         mating_pool: Vec<I>,
         rng: &mut ThreadRng,
-    ) -> Vec<I>
-    where
-        I: Individual + Crossover + Mutate,
-    {
+    ) -> Vec<I> {
         let mut new_population = Vec::with_capacity(self.population_size);
 
         for _ in 0..(self.population_size / 2) {
@@ -116,10 +113,14 @@ impl GeneticAlgorithm {
             };
 
             let mut child1 = child1;
-            child1.mutate(rng);
+            if rng.gen::<f64>() < self.mutation_rate {
+                child1.mutate(rng);
+            }
 
             let mut child2 = child2;
-            child2.mutate(rng);
+            if rng.gen::<f64>() < self.mutation_rate {
+                child2.mutate(rng);
+            }
 
             new_population.push(child1);
             new_population.push(child2);

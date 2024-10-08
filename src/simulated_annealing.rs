@@ -1,7 +1,7 @@
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
-use crate::individual::{Individual, Neighbor};
+use crate::individual::{Individual, Neighbor, FitnessValue};
 
 pub struct SimulatedAnnealing {
     pub initial_temp: f64,
@@ -25,13 +25,14 @@ impl SimulatedAnnealing {
 
 impl<I> Optimizer<I> for SimulatedAnnealing
 where
-    I: Individual + Neighbor,
-    I::Fitness: PartialOrd,
+    I: Individual + Neighbor + Default,
+    I::Fitness: PartialOrd + FitnessValue,
 {
     fn optimize<A>(&self, archive: &mut A)
     where
         A: Archive<Solution = I, Fitness = I::Fitness>,
     {
+        use crate::individual::FitnessValue; // Import the trait for to_f64()
         let mut rng = thread_rng();
         let mut current_state = I::default();
         let mut current_temp = self.initial_temp;

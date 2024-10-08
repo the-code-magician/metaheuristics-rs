@@ -8,6 +8,12 @@ impl FitnessValue for f64 {
     }
 }
 
+impl FitnessValue for usize {
+    fn to_f64(&self) -> f64 {
+        *self as f64
+    }
+}
+
 pub trait Individual: Clone {
     type Fitness: PartialOrd + FitnessValue;
 
