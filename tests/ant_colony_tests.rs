@@ -1,6 +1,6 @@
 use metaheuristics::ant_colony::AntColony;
 use metaheuristics::optimizer::Optimizer;
-use metaheuristics::archive::BasicArchive;
+use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::individuals::TourIndividual;
 
 #[test]
@@ -13,12 +13,13 @@ fn test_ant_colony_optimization() {
     ];
 
     let aco = AntColony::new(10, 100, 1.0, 5.0, 0.5, distances.clone());
-    let mut archive = BasicArchive::new(3);
+    let mut archive: BasicArchive<TourIndividual> = BasicArchive::new(3);
 
     let mut observers = [];
     ga.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());
+    
     if let Some(best_tour) = archive.get_best() {
         let fitness = best_tour.fitness();
         assert!(fitness >= 0.0);

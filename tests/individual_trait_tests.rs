@@ -1,7 +1,7 @@
 use crate::individual::{Individual, Crossover, Mutate};
 use crate::genetic_algorithm::GeneticAlgorithm;
 use crate::optimizer::Optimizer;
-use crate::archive::BasicArchive;
+use metaheuristics::archive::{BasicArchive, Archive};
 use rand::prelude::*;
 
 #[derive(Clone)]
@@ -37,9 +37,9 @@ impl Mutate for TestIndividual {
 #[test]
 fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
-    let mut archive = BasicArchive::new(5);
+    let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
 
-    ga.optimize::<BasicArchive<TestIndividual>>(&mut archive);
+    ga.optimize(&mut archive);
 
     assert!(archive.get_best().is_some());
 }
