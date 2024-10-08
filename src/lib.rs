@@ -7,6 +7,8 @@ pub use archive::{Archive, BasicArchive};
 pub mod individual;
 pub use individual::{Individual, FitnessValue};
 
+pub mod individuals;
+
 pub mod genetic_algorithm;
 pub mod simulated_annealing;
 pub mod particle_swarm;
