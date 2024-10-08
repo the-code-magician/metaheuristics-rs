@@ -1,8 +1,8 @@
 use metaheuristics::individual::{Individual, Crossover, Mutate};
 use metaheuristics::genetic_algorithm::GeneticAlgorithm;
 use metaheuristics::optimizer::Optimizer;
+use metaheuristics::observers::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
-use metaheuristics::Individual;
 use rand::prelude::*;
 
 #[derive(Clone)]
@@ -39,6 +39,7 @@ impl Mutate for TestIndividual {
 fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
+    let mut observers: Vec<Observer> = [];
 
     ga.optimize(&mut archive);
 
