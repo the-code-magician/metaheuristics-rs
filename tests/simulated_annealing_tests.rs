@@ -11,7 +11,7 @@ fn test_simulated_annealing_numeric_individual() {
     let mut archive = BasicArchive::new(5);
     let mut observers = [];
 
-    ga.optimize(&mut archive, &mut observers);
+    sa.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());
     if let Some(best_individual) = archive.get_best() {

@@ -16,7 +16,7 @@ fn test_ant_colony_optimization() {
     let mut archive: BasicArchive<TourIndividual> = BasicArchive::new(3);
 
     let mut observers = [];
-    ga.optimize(&mut archive, &mut observers);
+    aco.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());
 
