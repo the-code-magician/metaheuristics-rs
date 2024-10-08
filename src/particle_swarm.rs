@@ -1,7 +1,6 @@
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
-use crate::individual::Individual;
 use crate::individuals::ParticleIndividual;
 use crate::observer::Observer;
 use std::f64;

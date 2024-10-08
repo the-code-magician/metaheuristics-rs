@@ -148,3 +148,4 @@ where
             observer.on_finish();
         }
     }
+}
