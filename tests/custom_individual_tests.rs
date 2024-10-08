@@ -1,6 +1,6 @@
 use metaheuristics::genetic_algorithm::GeneticAlgorithm;
 use metaheuristics::optimizer::Optimizer;
-use metaheuristics::observers::Observer;
+use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::individual::{Individual, Crossover, Mutate, FitnessValue};
 use rand::prelude::*;

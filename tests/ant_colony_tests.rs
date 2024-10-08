@@ -1,6 +1,6 @@
 use metaheuristics::ant_colony::AntColony;
 use metaheuristics::Optimizer;
-use metaheuristics::Observer;
+use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::Individual;
 use metaheuristics::individuals::TourIndividual;
