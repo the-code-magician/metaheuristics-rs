@@ -15,6 +15,6 @@ fn test_genetic_algorithm_bitstring_individual() {
     assert!(archive.get_best().is_some());
     if let Some(best_individual) = archive.get_best() {
         let fitness = best_individual.fitness();
-        assert!(fitness <= 20);
+        assert!(fitness <= 20.0);
     }
 }
