@@ -1,5 +1,6 @@
 use metaheuristics::genetic_algorithm::GeneticAlgorithm;
 use metaheuristics::optimizer::Optimizer;
+use metaheuristics::observers::Observer;
 use metaheuristics::archive::{BasicArchive,Archive};
 use metaheuristics::Individual;
 use metaheuristics::individuals::BitStringIndividual;
@@ -8,7 +9,7 @@ use metaheuristics::individuals::BitStringIndividual;
 fn test_genetic_algorithm_bitstring_individual() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<BitStringIndividual> = BasicArchive::new(5);
-    let mut observers = [];
+    let mut observers: Vec<Observer> = [];
 
     ga.optimize(&mut archive, &mut observers);
 

@@ -1,5 +1,6 @@
 use metaheuristics::genetic_algorithm::GeneticAlgorithm;
 use metaheuristics::optimizer::Optimizer;
+use metaheuristics::observers::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::individual::{Individual, Crossover, Mutate, FitnessValue};
 use rand::prelude::*;
@@ -59,7 +60,7 @@ fn test_genetic_algorithm_custom_individual() {
     let ga = GeneticAlgorithm::new(100, 0.1, 0.7, 50);
     let mut archive:BasicArchive<CustomIndividual>  = BasicArchive::new(5);
 
-    let mut observers = [];
+    let mut observers: Vec<Observer> = [];
 
     ga.optimize(&mut archive, &mut observers);
 
