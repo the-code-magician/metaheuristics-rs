@@ -2,6 +2,7 @@ use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::{Individual, FitnessValue};
+use crate::individual::TourIndividual
 
 pub struct AntColony {
     pub num_ants: usize,
