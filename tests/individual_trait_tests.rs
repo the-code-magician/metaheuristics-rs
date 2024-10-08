@@ -10,17 +10,11 @@ struct TestIndividual {
 }
 
 impl Individual for TestIndividual {
-    type Fitness = usize;
+    type Fitness = f64;
 
     fn fitness(&self) -> Self::Fitness {
         // Example fitness function: count number of zeros
-        self.data.iter().filter(|&&x| x == 0).count()
-    }
-}
-
-impl crate::individual::FitnessValue for usize {
-    fn to_f64(&self) -> f64 {
-        *self as f64
+        self.data.iter().filter(|&&x| x == 0).count() as f64
     }
 }
 
