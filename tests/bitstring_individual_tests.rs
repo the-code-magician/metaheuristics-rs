@@ -1,6 +1,7 @@
 use metaheuristics::genetic_algorithm::GeneticAlgorithm;
 use metaheuristics::optimizer::Optimizer;
 use metaheuristics::archive::{BasicArchive,Archive};
+use metaheuristics::Individual;
 use metaheuristics::individuals::BitStringIndividual;
 
 #[test]
