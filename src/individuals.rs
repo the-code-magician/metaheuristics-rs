@@ -47,10 +47,10 @@ pub struct BitStringIndividual {
 }
 
 impl Individual for BitStringIndividual {
-    type Fitness = usize;
+    type Fitness = f64;
 
     fn fitness(&self) -> Self::Fitness {
-        self.bits.iter().filter(|&&bit| bit).count()
+        self.bits.iter().filter(|&&bit| bit).count() as f64
     }
 }
 
@@ -79,7 +79,7 @@ impl Default for BitStringIndividual {
 }
 
 #[derive(Clone)]
-struct ParticleIndividual {
+pub struct ParticleIndividual {
     position: Vec<f64>,
     velocity: Vec<f64>,
 }
@@ -102,7 +102,7 @@ impl Individual for ParticleIndividual {
 }
 
 #[derive(Clone)]
-struct TourIndividual {
+pub struct TourIndividual {
     tour: Vec<usize>,
     distances: Vec<Vec<f64>>,
 }

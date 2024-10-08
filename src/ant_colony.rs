@@ -1,8 +1,7 @@
 use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
-use crate::individual::{Individual, FitnessValue};
-use crate::individual::TourIndividual;
+use crate::individuals::TourIndividual;
 use crate::observer::Observer;
 
 pub struct AntColony {
@@ -35,7 +34,7 @@ impl AntColony {
 }
 
 impl Optimizer<TourIndividual> for AntColony {
-    fn optimize<A>(&self, archive: &mut A, observers: &mut [O]))
+    fn optimize<A>(&self, archive: &mut A, observers: &mut [O])
     where
         A: Archive<Solution = TourIndividual, Fitness = f64>,
         O: Observer<TourIndividual>,
