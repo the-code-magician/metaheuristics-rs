@@ -12,7 +12,7 @@ use rand::prelude::*;
 fn test_simulated_annealing_numeric_individual() {
     let sa = SimulatedAnnealing::new(100.0, 0.01, 500);
     let mut archive: BasicArchive<NumericIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<Observer> = [];
+    let mut observers: Vec<dyn Observer> = [];
 
     sa.optimize(&mut archive, &mut observers);
 

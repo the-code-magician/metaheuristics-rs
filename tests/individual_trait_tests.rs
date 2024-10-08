@@ -39,7 +39,7 @@ impl Mutate for TestIndividual {
 fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<Observer> = [];
+    let mut observers: Vec<dyn Observer> = [];
 
     ga.optimize(&mut archive, &mut observers);
 
