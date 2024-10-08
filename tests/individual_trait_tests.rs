@@ -1,6 +1,6 @@
-use crate::individual::{Individual, Crossover, Mutate};
-use crate::genetic_algorithm::GeneticAlgorithm;
-use crate::optimizer::Optimizer;
+use metaheuristics::individual::{Individual, Crossover, Mutate};
+use metaheuristics::genetic_algorithm::GeneticAlgorithm;
+use metaheuristics::optimizer::Optimizer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use rand::prelude::*;
 
