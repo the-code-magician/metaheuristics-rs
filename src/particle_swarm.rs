@@ -3,6 +3,7 @@ use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::Individual;
 use crate::individuals::ParticleIndividual;
+use crate::observer::Observer;
 use std::f64;
 
 pub struct ParticleSwarm<F>
@@ -47,9 +48,10 @@ impl<F> Optimizer<ParticleIndividual> for ParticleSwarm<F>
 where
     F: Fn(&Vec<f64>) -> f64 + Copy,
 {
-    fn optimize<A>(&self, archive: &mut A)
+    fn optimize<A, O>(&self, archive: &mut A, observers: &mut [O])
     where
         A: Archive<Solution = ParticleIndividual, Fitness = f64>,
+        O: Observer<ParticleIndividual>,
     {
         let mut rng = thread_rng();
 
@@ -59,6 +61,11 @@ where
 
         let mut global_best_position = vec![0.0; self.dimensions];
         let mut global_best_score = f64::INFINITY;
+
+        for observer in observers.iter_mut() {
+            observer.on_start();
+            observer.on_iteration(0, &particles);
+        }
 
         for particle in &mut particles {
             particle.update_fitness(&self.fitness_function);
@@ -98,6 +105,14 @@ where
 
                 archive.add(particle.clone());
             }
+        }
+
+        for observer in observers.iter_mut() {
+            observer.on_iteration(iteration, &particles);
+        }
+
+        for observer in observers.iter_mut() {
+            observer.on_finish();
         }
     }
 }

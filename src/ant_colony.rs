@@ -3,6 +3,7 @@ use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::{Individual, FitnessValue};
 use crate::individual::TourIndividual;
+use crate::observer::Observer;
 
 pub struct AntColony {
     pub num_ants: usize,
@@ -34,12 +35,18 @@ impl AntColony {
 }
 
 impl Optimizer<TourIndividual> for AntColony {
-    fn optimize<A>(&self, archive: &mut A)
+    fn optimize<A>(&self, archive: &mut A, observers: &mut [O]))
     where
         A: Archive<Solution = TourIndividual, Fitness = f64>,
+        O: Observer<TourIndividual>,
     {
         let num_nodes = self.distance_matrix.len();
         let mut pheromones = vec![vec![1.0; num_nodes]; num_nodes];
+
+        for observer in observers.iter_mut() {
+            observer.on_start();
+            observer.on_iteration(0, &[]);
+        }
 
         for _ in 0..self.num_iterations {
             let mut all_tours = Vec::new();
@@ -52,6 +59,10 @@ impl Optimizer<TourIndividual> for AntColony {
 
                 let individual = TourIndividual::new(tour.clone(), length);
                 archive.add(individual);
+            }
+
+            for observer in observers.iter_mut() {
+                observer.on_iteration(iteration, &all_tours);
             }
 
             // Evaporate pheromones
@@ -71,6 +82,10 @@ impl Optimizer<TourIndividual> for AntColony {
                     pheromones[j][i] += 1.0 / length;
                 }
             }
+        }
+        
+        for observer in observers.iter_mut() {
+            observer.on_finish();
         }
     }
 }

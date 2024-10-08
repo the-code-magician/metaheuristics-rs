@@ -4,6 +4,8 @@ use rand::prelude::*;
 use crate::optimizer::Optimizer;
 use crate::archive::Archive;
 use crate::individual::{Individual, Crossover, Mutate, FitnessValue};
+use crate::observer::Observer;
+
 
 pub struct GeneticAlgorithm {
     pub population_size: usize,
@@ -112,24 +114,37 @@ where
     I: Individual + Crossover + Mutate + Default,
     I::Fitness: PartialOrd + FitnessValue,
 {
-    fn optimize<A>(&self, archive: &mut A)
+    fn optimize<A, O>(&self, archive: &mut A, observers: &mut [O])
     where
         A: Archive<Solution = I, Fitness = I::Fitness>,
+        O: Observer<I>,
     {
         let mut population: Vec<I> = self.initialize_population();
         let mut rng = thread_rng();
 
-        for _ in 0..self.generations {
+        // Notify observers at the start
+        for observer in observers.iter_mut() {
+            observer.on_start();
+            observer.on_iteration(0, &population);
+        }
+
+        for generation in 1..=self.generations {
             let fitness_scores: Vec<I::Fitness> = population.iter().map(|ind| ind.fitness()).collect();
 
-            // Add to archive
             for individual in &population {
                 archive.add(individual.clone());
+            }
+
+            for observer in observers.iter_mut() {
+                observer.on_iteration(generation, &population);
             }
 
             let mating_pool = self.selection(&population, &fitness_scores);
 
             population = self.crossover_and_mutate(mating_pool, &mut rng);
         }
+
+        for observer in observers.iter_mut() {
+            observer.on_finish();
+        }
     }
-}
