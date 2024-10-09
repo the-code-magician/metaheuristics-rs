@@ -4,6 +4,9 @@ use metaheuristics::optimizer::Optimizer;
 use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use rand::prelude::*;
+use metaheuristics::logging_observers::LoggingObserver;
+use metaheuristics::distribution_observers::DistributionObserver;
+
 
 #[derive(Clone)]
 struct TestIndividual {
@@ -39,7 +42,9 @@ impl Mutate for TestIndividual {
 fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<dyn Observer> = [];
+    let mut observers: Vec<dyn Observer<NumericIndividual> = [
+        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    ];
 
     ga.optimize(&mut archive, &mut observers);
 

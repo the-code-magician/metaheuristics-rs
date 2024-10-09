@@ -4,6 +4,8 @@ use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::Individual;
 use metaheuristics::individuals::TourIndividual;
+use metaheuristics::logging_observers::LoggingObserver;
+use metaheuristics::distribution_observers::DistributionObserver;
 
 #[test]
 fn test_ant_colony_optimization() {
@@ -17,7 +19,10 @@ fn test_ant_colony_optimization() {
     let aco = AntColony::new(10, 100, 1.0, 5.0, 0.5, distances.clone());
     let mut archive: BasicArchive<TourIndividual> = BasicArchive::new(3);
 
-    let mut observers: Vec<dyn Observer> = [];
+    let mut observers: Vec<dyn Observer<NumericIndividual> = [
+        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    ];
+    
     aco.optimize(&mut archive, &mut observers);
 
     assert!(archive.get_best().is_some());

@@ -5,6 +5,8 @@ use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::Individual;
 use metaheuristics::individual::Neighbor;
 use metaheuristics::individuals::NumericIndividual;
+use metaheuristics::logging_observers::LoggingObserver;
+use metaheuristics::distribution_observers::DistributionObserver;
 use rand::prelude::*;
 
 
@@ -12,7 +14,9 @@ use rand::prelude::*;
 fn test_simulated_annealing_numeric_individual() {
     let sa = SimulatedAnnealing::new(100.0, 0.01, 500);
     let mut archive: BasicArchive<NumericIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<dyn Observer> = [];
+    let mut observers: Vec<dyn Observer<NumericIndividual> = [
+        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    ];
 
     sa.optimize(&mut archive, &mut observers);
 

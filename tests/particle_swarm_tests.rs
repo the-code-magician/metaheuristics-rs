@@ -4,6 +4,8 @@ use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::Individual;
 use metaheuristics::individuals::ParticleIndividual;
+use metaheuristics::logging_observers::LoggingObserver;
+use metaheuristics::distribution_observers::DistributionObserver;
 
 #[test]
 fn test_particle_swarm() {
@@ -25,7 +27,9 @@ fn test_particle_swarm() {
 
     let mut archive: BasicArchive<ParticleIndividual> = BasicArchive::new(5);
 
-    let mut observers: Vec<dyn Observer> = []; // Empty array of observers
+    let mut observers: Vec<dyn Observer<NumericIndividual> = [
+        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    ];
 
     pso.optimize(&mut archive, &mut observers);
 
