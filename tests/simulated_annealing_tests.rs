@@ -3,7 +3,7 @@ use metaheuristics::optimizer::Optimizer;
 use metaheuristics::observer::Observer;
 use metaheuristics::archive::{BasicArchive, Archive};
 use metaheuristics::Individual;
-use metaheuristics::individuals::Neighbor;
+use metaheuristics::individual::Neighbor;
 use metaheuristics::individuals::NumericIndividual;
 use rand::prelude::*;
 
