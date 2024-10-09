@@ -132,7 +132,7 @@ impl Individual for ParticleIndividual {
 
 impl Default for ParticleIndividual {
     fn default() -> Self {
-        Self::new()43
+        Self::new(2)
     }
 }
 
