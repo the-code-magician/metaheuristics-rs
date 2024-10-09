@@ -1,18 +1,14 @@
 use crate::observer::Observer;
 use crate::individual::Individual;
 
-pub struct LoggingObserver<I>
-where
-    I: Individual,
+pub struct LoggingObserver
 {
     pub log_iteration: bool,
     pub log_fitness: bool,
     pub log_individuals: bool,
 }
 
-impl<I> LoggingObserver<I>
-where
-    I: Individual,
+impl LoggingObserver
 {
     pub fn new(log_iteration: bool, log_fitness: bool, log_individuals: bool) -> Self {
         Self {
