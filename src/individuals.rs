@@ -1,8 +1,9 @@
 use rand::prelude::*;
-use crate::individual::{Individual, Crossover, Mutate, Neighbor};
+use crate::individual::{Individual, Default, Crossover, Mutate, Neighbor};
 use std::f64;
 
-#[derive(Clone, Neighbor)]
+
+#[derive(Clone)]
 pub struct NumericIndividual {
     pub genes: Vec<f64>,
 }
@@ -41,7 +42,6 @@ impl Default for NumericIndividual {
 
 impl Neighbor for NumericIndividual {
     fn neighbor(&mut self, rng: &mut ThreadRng) -> Self {
-        let mut rng = thread_rng();
         let genes = self.genes.into_iter().map(|v| v + rng.gen_range(-1.0..1.0)).collect();
         Self { genes }
     }
@@ -132,7 +132,7 @@ impl Individual for ParticleIndividual {
 
 impl Default for ParticleIndividual {
     fn default() -> Self {
-        Self::new(2) // Default to 2 dimensions
+        Self::new()
     }
 }
 
