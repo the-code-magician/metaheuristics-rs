@@ -1,5 +1,5 @@
 use rand::prelude::*;
-use crate::individual::{Individual, Default, Crossover, Mutate, Neighbor};
+use crate::individual::{Individual, Crossover, Mutate, Neighbor};
 use std::f64;
 
 

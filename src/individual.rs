@@ -25,8 +25,3 @@ pub trait Mutate: Individual {
 pub trait Neighbor: Individual {
     fn neighbor(&mut self, rng: &mut rand::rngs::ThreadRng) -> Self;
 }
-
-pub trait Default: Individual {
-    fn default() -> Self;
-}
-
