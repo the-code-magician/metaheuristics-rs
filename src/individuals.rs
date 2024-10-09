@@ -42,7 +42,7 @@ impl Default for NumericIndividual {
 
 impl Neighbor for NumericIndividual {
     fn neighbor(&mut self, rng: &mut ThreadRng) -> Self {
-        let genes = self.genes.into_iter().map(|v| v + rng.gen_range(-1.0..1.0)).collect();
+        let genes = self.genes.clone().into_iter().map(|v| v + rng.gen_range(-1.0..1.0)).collect();
         Self { genes }
     }
 }
@@ -132,7 +132,7 @@ impl Individual for ParticleIndividual {
 
 impl Default for ParticleIndividual {
     fn default() -> Self {
-        Self::new()
+        Self::new()43
     }
 }
 
