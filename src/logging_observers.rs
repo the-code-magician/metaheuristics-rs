@@ -53,3 +53,4 @@ where
     fn on_finish(&mut self) {
         println!("Optimization finished.");
     }
+}
