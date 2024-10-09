@@ -42,7 +42,7 @@ impl Default for NumericIndividual {
 impl Neighbor for NumericIndividual {
     fn neighbor(&mut self, rng: &mut ThreadRng) -> Self {
         let mut rng = thread_rng();
-        let genes = self.genes.map(|v| v + rng.gen_range(-1.0..1.0)).collect();
+        let genes = self.genes.into_iter().map(|v| v + rng.gen_range(-1.0..1.0)).collect();
         Self { genes }
     }
 }

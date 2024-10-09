@@ -23,5 +23,5 @@ pub trait Mutate: Individual {
 }
 
 pub trait Neighbor: Individual {
-    fn neighbor(&self, rng: &mut rand::rngs::ThreadRng) -> Self;
+    fn neighbor(&mut self, rng: &mut rand::rngs::ThreadRng) -> Self;
 }
