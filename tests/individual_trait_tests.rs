@@ -38,6 +38,12 @@ impl Mutate for TestIndividual {
     }
 }
 
+impl Default for TestIndividual {
+    fn default() -> Self {
+        TestIndividual::new([1, 1, 1, 1].to_vec())
+    }
+}
+
 #[test]
 fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
