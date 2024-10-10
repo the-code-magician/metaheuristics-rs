@@ -22,6 +22,7 @@ where
             log_iteration,
             log_fitness,
             log_individuals,
+            resource_type: PhantomData,
         }
     }
 }
