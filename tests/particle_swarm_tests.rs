@@ -27,8 +27,9 @@ fn test_particle_swarm() {
 
     let mut archive: BasicArchive<ParticleIndividual> = BasicArchive::new(5);
 
-    let mut observers: Vec<dyn Observer<NumericIndividual> = [
-        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    let mut observers: Vec<dyn Observer<ParticleIndividual>> = [
+        LoggingObserver<ParticleIndividual>::new(true, true, true),
+        DistributionObserver<ParticleIndividual>::new(),
     ];
 
     pso.optimize(&mut archive, &mut observers);

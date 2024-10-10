@@ -11,8 +11,10 @@ use metaheuristics::distribution_observers::DistributionObserver;
 fn test_genetic_algorithm_bitstring_individual() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<BitStringIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<dyn Observer<NumericIndividual> = [
-        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    
+    let mut observers: Vec<dyn Observer<BitStringIndividual>> = [
+        LoggingObserver<BitStringIndividual>::new(true, true, true),
+        DistributionObserver<BitStringIndividual>::new(),
     ];
 
     ga.optimize(&mut archive, &mut observers);

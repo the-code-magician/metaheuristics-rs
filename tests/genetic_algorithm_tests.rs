@@ -12,8 +12,10 @@ use metaheuristics::distribution_observers::DistributionObserver;
 fn test_genetic_algorithm_numeric_individual() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<NumericIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<dyn Observer<NumericIndividual> = [
-        LoggingObserver::new(True, True, True), DistributionObserver::new()
+    
+    let mut observers: Vec<dyn Observer<NumericIndividual>> = [
+        LoggingObserver<NumericIndividual>::new(true, true, true),
+        DistributionObserver<NumericIndividual>::new(),
     ];
 
     ga.optimize(&mut archive, &mut observers);
