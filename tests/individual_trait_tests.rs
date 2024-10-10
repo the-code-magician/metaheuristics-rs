@@ -43,10 +43,10 @@ fn test_individual_trait_with_genetic_algorithm() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<TestIndividual> = BasicArchive::new(5);
     
-    let mut observers: Vec<dyn Observer<TestIndividual>> = Vec::from([
+    let mut observers: Vec<&mut dyn Observer<TestIndividual>> = !vec[
         LoggingObserver::new(true, true, true),
         DistributionObserver::new(),
-    ]);
+    ];
 
     ga.optimize(&mut archive, &mut observers);
 
