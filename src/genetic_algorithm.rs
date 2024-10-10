@@ -79,13 +79,13 @@ impl GeneticAlgorithm {
             let parent1 = &mating_pool[rng.gen_range(0..self.population_size)];
             let parent2 = &mating_pool[rng.gen_range(0..self.population_size)];
 
-            let child1 = if rng.gen::<f64>() < self.crossover_rate {
+            let mut child1 = if rng.gen::<f64>() < self.crossover_rate {
                 parent1.crossover(parent2, rng)
             } else {
                 parent1.clone()
             };
 
-            let child2 = if rng.gen::<f64>() < self.crossover_rate {
+            let mut child2 = if rng.gen::<f64>() < self.crossover_rate {
                 parent2.crossover(parent1, rng)
             } else {
                 parent2.clone()
