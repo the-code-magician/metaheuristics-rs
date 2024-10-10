@@ -29,7 +29,6 @@ fn test_particle_swarm() {
 
     let mut observers = vec![
         LoggingObserver::new(true, true, true),
-        DistributionObserver::new(),
     ];
 
     pso.optimize(&mut archive, &mut observers);

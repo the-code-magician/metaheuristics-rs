@@ -45,7 +45,6 @@ fn test_individual_trait_with_genetic_algorithm() {
     
     let mut observers = vec![
         LoggingObserver::new(true, true, true),
-        DistributionObserver::new(),
     ];
 
     ga.optimize(&mut archive, &mut observers);

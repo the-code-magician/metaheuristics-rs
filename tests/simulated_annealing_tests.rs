@@ -16,7 +16,6 @@ fn test_simulated_annealing_numeric_individual() {
     let mut archive: BasicArchive<NumericIndividual> = BasicArchive::new(5);
     let mut observers = vec![
         LoggingObserver::new(true, true, true),
-        DistributionObserver::new(),
     ];
 
     sa.optimize(&mut archive, &mut observers);

@@ -21,7 +21,6 @@ fn test_ant_colony_optimization() {
 
     let mut observers = vec![
         LoggingObserver::new(true, true, true),
-        DistributionObserver::new(),
     ];
     
     aco.optimize(&mut archive, &mut observers);
