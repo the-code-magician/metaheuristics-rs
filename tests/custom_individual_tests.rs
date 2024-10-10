@@ -62,10 +62,10 @@ fn test_genetic_algorithm_custom_individual() {
     let ga = GeneticAlgorithm::new(100, 0.1, 0.7, 50);
     let mut archive:BasicArchive<CustomIndividual>  = BasicArchive::new(5);
 
-    let mut observers: Vec<dyn Observer<CustomIndividual>> = [
+    let mut observers: Vec<dyn Observer<CustomIndividual>> = Vec::from([
         LoggingObserver::new(true, true, true),
         DistributionObserver::new(),
-    ];
+    ]);
 
     ga.optimize(&mut archive, &mut observers);
 

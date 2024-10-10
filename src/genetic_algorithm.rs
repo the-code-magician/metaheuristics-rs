@@ -91,12 +91,10 @@ impl GeneticAlgorithm {
                 parent2.clone()
             };
 
-            let mut child1 = child1;
             if rng.gen::<f64>() < self.mutation_rate {
                 child1.mutate(rng);
             }
 
-            let mut child2 = child2;
             if rng.gen::<f64>() < self.mutation_rate {
                 child2.mutate(rng);
             }
