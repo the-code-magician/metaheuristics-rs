@@ -1,14 +1,21 @@
 use crate::observer::Observer;
 use crate::individual::Individual;
+use std::marker::PhantomData;
 
-pub struct LoggingObserver
+
+pub struct LoggingObserver<I>
+where
+    I: Individual,
 {
     pub log_iteration: bool,
     pub log_fitness: bool,
     pub log_individuals: bool,
+    p: PhantomData<I>,
 }
 
-impl LoggingObserver
+impl<I> LoggingObserver<I>
+where
+    I: Individual,
 {
     pub fn new(log_iteration: bool, log_fitness: bool, log_individuals: bool) -> Self {
         Self {
