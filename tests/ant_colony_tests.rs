@@ -19,9 +19,9 @@ fn test_ant_colony_optimization() {
     let aco = AntColony::new(10, 100, 1.0, 5.0, 0.5, distances.clone());
     let mut archive: BasicArchive<TourIndividual> = BasicArchive::new(3);
 
-    let mut observers: Vec<dyn Observer<TourIndividual>> = [
-        LoggingObserver<TourIndividual>::new(true, true, true),
-        DistributionObserver<TourIndividual>::new(),
+    let mut observers: Vec<Observer<TourIndividual>> = [
+        LoggingObserver::new(true, true, true),
+        DistributionObserver::new(),
     ];
     
     aco.optimize(&mut archive, &mut observers);

@@ -12,9 +12,9 @@ fn test_genetic_algorithm_bitstring_individual() {
     let ga = GeneticAlgorithm::new(50, 0.05, 0.8, 30);
     let mut archive: BasicArchive<BitStringIndividual> = BasicArchive::new(5);
     
-    let mut observers: Vec<dyn Observer<BitStringIndividual>> = [
-        LoggingObserver<BitStringIndividual>::new(true, true, true),
-        DistributionObserver<BitStringIndividual>::new(),
+    let mut observers: Vec<Observer<BitStringIndividual>> = [
+        LoggingObserver::new(true, true, true),
+        DistributionObserver::new(),
     ];
 
     ga.optimize(&mut archive, &mut observers);
