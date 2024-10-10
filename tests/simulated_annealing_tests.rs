@@ -14,7 +14,7 @@ use rand::prelude::*;
 fn test_simulated_annealing_numeric_individual() {
     let sa = SimulatedAnnealing::new(100.0, 0.01, 500);
     let mut archive: BasicArchive<NumericIndividual> = BasicArchive::new(5);
-    let mut observers: Vec<&mut dyn Observer<NumericIndividual>> = !vec[
+    let mut observers: Vec<&mut dyn Observer<NumericIndividual>> = vec![
         LoggingObserver::new(true, true, true),
         DistributionObserver::new(),
     ];

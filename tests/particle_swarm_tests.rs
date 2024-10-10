@@ -27,7 +27,7 @@ fn test_particle_swarm() {
 
     let mut archive: BasicArchive<ParticleIndividual> = BasicArchive::new(5);
 
-    let mut observers: Vec<&mut dyn Observer<ParticleIndividual>> = !vec[
+    let mut observers: Vec<&mut dyn Observer<ParticleIndividual>> = vec![
         LoggingObserver::new(true, true, true),
         DistributionObserver::new(),
     ];
