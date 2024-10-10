@@ -7,7 +7,7 @@ use metaheuristics::logging_observers::LoggingObserver;
 use metaheuristics::distribution_observers::DistributionObserver;
 use rand::prelude::*;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct CustomIndividual {
     data: Vec<char>,
 }
