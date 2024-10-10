@@ -8,7 +8,7 @@ use metaheuristics::logging_observers::LoggingObserver;
 use metaheuristics::distribution_observers::DistributionObserver;
 
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct TestIndividual {
     data: Vec<u8>,
 }
