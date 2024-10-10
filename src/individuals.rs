@@ -156,8 +156,7 @@ impl Individual for TourIndividual {
     }
 }
 
-
-impl Default for ParticleIndividual {
+impl Default for TourIndividual {
     fn default() -> Self {
         Self::new([1, 1, 1, 1], 10.5)
     }
