@@ -40,7 +40,7 @@ impl Mutate for TestIndividual {
 
 impl Default for TestIndividual {
     fn default() -> Self {
-        TestIndividual::new()
+        Self { [1, 1, 1, 1].to_vec() }
     }
 }
 
