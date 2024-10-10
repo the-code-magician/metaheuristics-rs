@@ -155,3 +155,10 @@ impl Individual for TourIndividual {
         self.length
     }
 }
+
+
+impl Default for ParticleIndividual {
+    fn default() -> Self {
+        Self::new([1, 1, 1, 1], 10.5)
+    }
+}
