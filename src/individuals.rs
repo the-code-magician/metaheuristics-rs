@@ -3,7 +3,7 @@ use crate::individual::{Individual, Crossover, Mutate, Neighbor};
 use std::f64;
 
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct NumericIndividual {
     pub genes: Vec<f64>,
 }
@@ -47,7 +47,7 @@ impl Neighbor for NumericIndividual {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct BitStringIndividual {
     pub bits: Vec<bool>,
 }
@@ -85,7 +85,7 @@ impl Default for BitStringIndividual {
 }
 
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ParticleIndividual {
     pub position: Vec<f64>,
     pub velocity: Vec<f64>,
@@ -136,7 +136,7 @@ impl Default for ParticleIndividual {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TourIndividual {
     pub tour: Vec<usize>,
     pub length: f64,
